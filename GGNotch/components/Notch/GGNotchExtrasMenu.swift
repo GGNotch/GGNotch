@@ -43,7 +43,7 @@ struct GGNotchExtrasMenu : View {
     var github: some View {
         GGNotchLargeButtons(
             action: {
-                if let url = URL(string: "https://github.com/Ruchikon-M/GGNotch") {
+                if let url = URL(string: "https://github.com/GGNotch/GGNotch") {
                     NSWorkspace.shared.open(url)
                 }
             },

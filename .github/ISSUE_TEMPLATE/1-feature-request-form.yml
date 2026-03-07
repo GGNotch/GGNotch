@@ -9,7 +9,7 @@ body:
       value: |
         ## Feature Request
         
-        Thanks for helping make **GGNotch** better! Please check [existing requests](https://github.com/Ruchikon-M/GGNotch/issues?q=is%3Aissue) before submitting to avoid duplicates.
+        Thanks for helping make **GGNotch** better! Please check [existing requests](https://github.com/GGNotch/GGNotch/issues?q=is%3Aissue) before submitting to avoid duplicates.
 
   - type: textarea
     id: problem

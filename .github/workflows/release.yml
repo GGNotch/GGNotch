@@ -228,8 +228,8 @@ jobs:
           fi
           printf '%s' "$SPARKLE_PRIVATE_KEY" | ./Configuration/sparkle/generate_appcast \
             --ed-key-file - \
-            --link "https://github.com/Ruchikon-M/GGNotch/releases" \
-            --download-url-prefix "https://github.com/Ruchikon-M/GGNotch/releases/download/v${VERSION}/" \
+            --link "https://github.com/GGNotch/GGNotch/releases" \
+            --download-url-prefix "https://github.com/GGNotch/GGNotch/releases/download/v${VERSION}/" \
             --embed-release-notes \
             "${CHANNEL_ARGS[@]}" \
             -o updater/appcast.xml \
@@ -281,7 +281,7 @@ jobs:
       - name: Generate cask files
         run: |
           set -euo pipefail
-          DMG_URL="https://github.com/Ruchikon-M/GGNotch/releases/download/v${VERSION}/GGNotch.dmg"
+          DMG_URL="https://github.com/GGNotch/GGNotch/releases/download/v${VERSION}/GGNotch.dmg"
 
           # Retry SHA calculation (release may need a moment to propagate)
           for attempt in 1 2 3; do
@@ -299,7 +299,7 @@ jobs:
             url "${DMG_URL}"
             name "${DISPLAY_NAME}"
             desc "${DESC}"
-            homepage "https://github.com/Ruchikon-M/GGNotch"
+            homepage "https://github.com/GGNotch/GGNotch"
             livecheck do
               url :url
               strategy :github_latest
@@ -330,7 +330,7 @@ jobs:
 
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
-          repository: Ruchikon-M/homebrew-ggnotch
+          repository: GGNotch/homebrew-ggnotch
           token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
           path: homebrew-tap
 

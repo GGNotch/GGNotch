@@ -21,7 +21,7 @@ You can contribute in many ways: writing code, improving documentation, reportin
 
 ## Localizations
 
-Please submit all translations to GitHub Issues: https://github.com/Ruchikon-M/GGNotch/issues. New strings added to the `dev` branch from code changes will sync automatically to Crowdin, and Crowdin will automatically open a new PR with translations to allow us to integrate them.
+Please submit all translations to GitHub Issues: https://github.com/GGNotch/GGNotch/issues. New strings added to the `dev` branch from code changes will sync automatically to Crowdin, and Crowdin will automatically open a new PR with translations to allow us to integrate them.
 
 ## Contributing Code
 
@@ -126,7 +126,7 @@ If you need help or have questions:
 - Check the project documentation
 - Search existing issues for similar questions
 - Open a new issue with the "question" label
-- Join our [community Discord server](https://github.com/Ruchikon-M/GGNotch/discussions)
+- Join our [community Discord server](https://github.com/GGNotch/GGNotch/discussions)
 
 ---
 
