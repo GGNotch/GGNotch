@@ -266,8 +266,8 @@ struct ContentView: View {
 
     @ViewBuilder
     func NotchLayout() -> some View {
-        VStack(alignment: .leading) {
-            VStack(alignment: .leading) {
+        VStack(alignment: .center) {
+            VStack(alignment: .center) {
                 if coordinator.helloAnimationRunning {
                     Spacer()
                     HelloAnimation(onFinish: {
@@ -414,7 +414,7 @@ struct ContentView: View {
 
     @ViewBuilder
     func MusicLiveActivity() -> some View {
-        HStack(spacing: 0) {
+        HStack(spacing: 6) {
             // Closed-mode album art: scale padding and corner radius according to cornerRadiusScaleFactor
             let baseArtSize = displayClosedNotchHeight - 12
             let scaledArtSize: CGFloat = {
@@ -441,7 +441,7 @@ struct ContentView: View {
                 )
                 .matchedGeometryEffect(id: "albumArt", in: albumArtNamespace)
                 .frame(
-                    width: scaledArtSize,
+                    width: max(0, displayClosedNotchHeight - 12 + gestureProgress / 2),
                     height: scaledArtSize
                 )
 
