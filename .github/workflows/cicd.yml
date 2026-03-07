@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   build:
-    name: Build Boring Notch (${{ matrix.xcode }} on ${{ matrix.os }})
+    name: Build GGNotch (${{ matrix.xcode }} on ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -38,7 +38,7 @@ jobs:
         with:
           xcode: ${{ matrix.xcode }}
           platform: macOS
-          scheme: boringNotch
+          scheme: GGNotch
           action: build
           verbosity: xcpretty
           upload-logs: always

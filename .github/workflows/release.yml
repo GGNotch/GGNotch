@@ -1,4 +1,4 @@
-name: "Deploy Boring Notch"
+name: "Deploy GGNotch"
 on:
   issue_comment:
     types: [created]
@@ -8,7 +8,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PROJECT_NAME: boringNotch
+  PROJECT_NAME: GGNotch
   BETA_CHANNEL_NAME: beta
   RELEASE_COMMAND: /release
   CODE_SIGN_IDENTITY: "Apple Development"
@@ -212,7 +212,7 @@ jobs:
       - name: Create embedded release notes
         env:
           RELEASE_NOTES: ${{ needs.preparation.outputs.release_notes }}
-        run: printf '%s' "$RELEASE_NOTES" > Release/boringNotch.html
+        run: printf '%s' "$RELEASE_NOTES" > Release/GGNotch.html
 
       - name: Generate signed appcast
         env:
@@ -228,8 +228,8 @@ jobs:
           fi
           printf '%s' "$SPARKLE_PRIVATE_KEY" | ./Configuration/sparkle/generate_appcast \
             --ed-key-file - \
-            --link "https://github.com/TheBoredTeam/boring.notch/releases" \
-            --download-url-prefix "https://github.com/TheBoredTeam/boring.notch/releases/download/v${VERSION}/" \
+            --link "https://github.com/Ruchikon-M/GGNotch/releases" \
+            --download-url-prefix "https://github.com/Ruchikon-M/GGNotch/releases/download/v${VERSION}/" \
             --embed-release-notes \
             "${CHANNEL_ARGS[@]}" \
             -o updater/appcast.xml \
@@ -265,7 +265,7 @@ jobs:
           if [[ "${IS_BETA}" == "true" ]]; then
             RELEASE_FLAGS=(--prerelease)
           fi
-          gh release create "v${VERSION}" Release/boringNotch.dmg \
+          gh release create "v${VERSION}" Release/GGNotch.dmg \
             --title "v${VERSION} - ${TITLE}" \
             --notes "$NOTES" \
             "${RELEASE_FLAGS[@]}"
@@ -281,7 +281,7 @@ jobs:
       - name: Generate cask files
         run: |
           set -euo pipefail
-          DMG_URL="https://github.com/TheBoredTeam/boring.notch/releases/download/v${VERSION}/boringNotch.dmg"
+          DMG_URL="https://github.com/Ruchikon-M/GGNotch/releases/download/v${VERSION}/GGNotch.dmg"
 
           # Retry SHA calculation (release may need a moment to propagate)
           for attempt in 1 2 3; do
@@ -299,27 +299,27 @@ jobs:
             url "${DMG_URL}"
             name "${DISPLAY_NAME}"
             desc "${DESC}"
-            homepage "https://github.com/TheBoredTeam/boring.notch"
+            homepage "https://github.com/Ruchikon-M/GGNotch"
             livecheck do
               url :url
               strategy :github_latest
             end
             auto_updates true
             depends_on macos: ">= :sonoma"
-            app "boringNotch.app"
+            app "GGNotch.app"
             zap trash: [
-              "~/Library/Application Scripts/theboringteam.boringnotch/",
-              "~/Library/Containers/theboringteam.boringnotch/",
+              "~/Library/Application Scripts/com.ggnotch.app/",
+              "~/Library/Containers/com.ggnotch.app/",
             ]
           end
           CASK
           }
 
-          write_cask "boring-notch@rc" "Boring Notch RC" \
-            "Not so boring notch That Rocks (Release Candidate)" > boring-notch@rc.rb
+          write_cask "ggnotch@rc" "GGNotch RC" \
+            "GGNotch (Release Candidate)" > ggnotch@rc.rb
           if [[ "${IS_BETA}" == "false" ]]; then
-            write_cask "boring-notch" "Boring Notch" \
-              "Not so boring notch That Rocks" > boring-notch.rb
+            write_cask "ggnotch" "GGNotch" \
+              "GGNotch" > ggnotch.rb
           fi
 
       - name: Upload cask artifacts
@@ -330,17 +330,17 @@ jobs:
 
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
-          repository: TheBoredTeam/homebrew-boring-notch
+          repository: Ruchikon-M/homebrew-ggnotch
           token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
           path: homebrew-tap
 
       - name: Update casks in tap
         run: |
           set -euo pipefail
-          cp boring-notch@rc.rb homebrew-tap/Casks/boring-notch@rc.rb
+          cp ggnotch@rc.rb homebrew-tap/Casks/ggnotch@rc.rb
           COMMIT_MSG="Update boring-notch@rc to v${VERSION}"
           if [[ "${IS_BETA}" == "false" ]]; then
-            cp boring-notch.rb homebrew-tap/Casks/boring-notch.rb
+            cp ggnotch.rb homebrew-tap/Casks/ggnotch.rb
             COMMIT_MSG="Update boring-notch and boring-notch@rc to v${VERSION}"
           fi
           cd homebrew-tap
@@ -416,9 +416,9 @@ jobs:
             BUILD_TYPE="stable"
           fi
           if [[ "${RELEASE_SUCCEEDED}" == "true" ]]; then
-            echo "✅ Released boringNotch v${VERSION} (${BUILD_TYPE} build ${BUILD_NUMBER})" >> "$GITHUB_STEP_SUMMARY"
+            echo "✅ Released GGNotch v${VERSION} (${BUILD_TYPE} build ${BUILD_NUMBER})" >> "$GITHUB_STEP_SUMMARY"
             echo "🍺 Homebrew cask updated" >> "$GITHUB_STEP_SUMMARY"
             echo "📱 Sparkle appcast updated" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "❌ Release failed${VERSION:+ for boringNotch v${VERSION}}" >> "$GITHUB_STEP_SUMMARY"
+            echo "❌ Release failed${VERSION:+ for GGNotch v${VERSION}}" >> "$GITHUB_STEP_SUMMARY"
           fi
