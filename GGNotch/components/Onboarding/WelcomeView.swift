@@ -62,9 +62,8 @@ struct WelcomeView: View {
                 .padding(.top)
             }
             
-            Image("theboringteam")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
+            Text("GGNotch")
+                .font(.system(size: 16, weight: .semibold, design: .rounded))
                 .frame(height: 22)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                 .padding()

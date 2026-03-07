@@ -326,7 +326,7 @@ jobs:
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: homebrew-cask-${{ env.VERSION }}
-          path: boring-notch*.rb
+          path: ggnotch*.rb
 
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
@@ -338,10 +338,10 @@ jobs:
         run: |
           set -euo pipefail
           cp ggnotch@rc.rb homebrew-tap/Casks/ggnotch@rc.rb
-          COMMIT_MSG="Update boring-notch@rc to v${VERSION}"
+          COMMIT_MSG="Update ggnotch@rc to v${VERSION}"
           if [[ "${IS_BETA}" == "false" ]]; then
             cp ggnotch.rb homebrew-tap/Casks/ggnotch.rb
-            COMMIT_MSG="Update boring-notch and boring-notch@rc to v${VERSION}"
+            COMMIT_MSG="Update ggnotch and ggnotch@rc to v${VERSION}"
           fi
           cd homebrew-tap
           git config user.name "github-actions[bot]"
