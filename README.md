@@ -6,6 +6,8 @@
   <br>
 </h1>
 
+> **Based on [boring.notch](https://github.com/TheBoredTeam/boring.notch) by TheBoredTeam, licensed under [GPL v3](./LICENSE). This is a modified fork.**
+
 
 <p align="center">
   <a title="Crowdin" target="_blank" href="https://crowdin.com/project/boring-notch"><img src="https://badges.crowdin.net/boring-notch/localized.svg"></a>
