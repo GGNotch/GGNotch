@@ -47,7 +47,7 @@ struct About: View {
                 HStack(spacing: 30) {
                     Spacer(minLength: 0)
                     Button {
-                        if let url = URL(string: "https://github.com/Ruchikon-M/GGNotch") {
+                        if let url = URL(string: "https://github.com/GGNotch/GGNotch") {
                             NSWorkspace.shared.open(url)
                         }
                     } label: {

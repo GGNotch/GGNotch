@@ -4,10 +4,10 @@
 
 **Your MacBook's notch, finally useful.**
 
-[![Build](https://github.com/Ruchikon-M/GGNotch/actions/workflows/cicd.yml/badge.svg)](https://github.com/Ruchikon-M/GGNotch/actions/workflows/cicd.yml)
+[![Build](https://github.com/GGNotch/GGNotch/actions/workflows/cicd.yml/badge.svg)](https://github.com/GGNotch/GGNotch/actions/workflows/cicd.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](./LICENSE)
 [![macOS](https://img.shields.io/badge/macOS-14%2B-black)](https://www.apple.com/macos/)
-[![Release](https://img.shields.io/github/v/release/Ruchikon-M/GGNotch)](https://github.com/Ruchikon-M/GGNotch/releases/latest)
+[![Release](https://img.shields.io/github/v/release/GGNotch/GGNotch)](https://github.com/GGNotch/GGNotch/releases/latest)
 
 </div>
 
@@ -38,12 +38,12 @@ GGNotch transforms the black bar at the top of your MacBook into a live, interac
 ### Homebrew (Recommended)
 
 ```bash
-brew install --cask Ruchikon-M/ggnotch/ggnotch --no-quarantine
+brew install --cask GGNotch/ggnotch/ggnotch --no-quarantine
 ```
 
 ### Manual
 
-<a href="https://github.com/Ruchikon-M/GGNotch/releases/latest/download/GGNotch.dmg" target="_self"><img width="200" src="https://github.com/user-attachments/assets/e3179be1-8416-4b8a-b417-743e1ecc67d6" alt="Download for macOS" /></a>
+<a href="https://github.com/GGNotch/GGNotch/releases/latest/download/GGNotch.dmg" target="_self"><img width="200" src="https://github.com/user-attachments/assets/e3179be1-8416-4b8a-b417-743e1ecc67d6" alt="Download for macOS" /></a>
 
 1. Open the `.dmg` and drag **GGNotch** to `/Applications`
 2. Run once to bypass Gatekeeper:
@@ -86,7 +86,7 @@ xattr -dr com.apple.quarantine /Applications/GGNotch.app
 ## Building from Source
 
 ```bash
-git clone https://github.com/Ruchikon-M/GGNotch.git
+git clone https://github.com/GGNotch/GGNotch.git
 cd GGNotch
 open GGNotch.xcodeproj
 ```
