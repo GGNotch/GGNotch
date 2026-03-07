@@ -43,9 +43,10 @@ brew install --cask Ruchikon-M/ggnotch/ggnotch --no-quarantine
 
 ### Manual
 
-1. Download the latest `.dmg` from [Releases](https://github.com/Ruchikon-M/GGNotch/releases/latest)
-2. Open the `.dmg` and drag **GGNotch** to `/Applications`
-3. Run once to bypass Gatekeeper:
+<a href="https://github.com/Ruchikon-M/GGNotch/releases/latest/download/GGNotch.dmg" target="_self"><img width="200" src="https://github.com/user-attachments/assets/e3179be1-8416-4b8a-b417-743e1ecc67d6" alt="Download for macOS" /></a>
+
+1. Open the `.dmg` and drag **GGNotch** to `/Applications`
+2. Run once to bypass Gatekeeper:
 
 ```bash
 xattr -dr com.apple.quarantine /Applications/GGNotch.app
