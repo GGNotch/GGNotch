@@ -50,7 +50,7 @@ public struct DraggableProgressBar: View {
                 }
             }
         }
-        .frame(height: compact ? (Defaults[.inlineOSD] ? 6 : 7) : (Defaults[.inlineOSD] ? (isDragging ? 8 : 5) : (isDragging ? 9 : 6)))
+        .frame(height: compact ? (Defaults[.inlineOSD] ? 3 : 4) : (Defaults[.inlineOSD] ? (isDragging ? 8 : 5) : (isDragging ? 9 : 6)))
     }
 
     private func fillStyle() -> AnyShapeStyle {

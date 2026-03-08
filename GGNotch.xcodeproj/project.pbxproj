@@ -290,7 +290,7 @@
 		14CEF4172C5CAED300855D72 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		14CEF4192C5CAED400855D72 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		14CEF41C2C5CAED400855D72 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		14CEF41E2C5CAED400855D72 /* ggNotch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GGNotch.entitlements; sourceTree = "<group>"; };
+		14CEF41E2C5CAED400855D72 /* GGNotch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GGNotch.entitlements; sourceTree = "<group>"; };
 		14D031ED2C689DB70096E6A1 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		14D031EF2C689DC00096E6A1 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		14D570B82C5E98A20011E668 /* drop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drop.swift; sourceTree = "<group>"; };
@@ -619,7 +619,7 @@
 			isa = PBXGroup;
 			children = (
 				112B0EB62E30DD0F00562D6C /* mediaremote-adapter */,
-				14CEF4142C5CAED300855D72 /* ggNotch */,
+				14CEF4142C5CAED300855D72 /* GGNotch */,
 				11F748502EC9AABA00F841DB /* GGNotchXPCHelper */,
 				14CEF4132C5CAED300855D72 /* Products */,
 				14D031EC2C689DB70096E6A1 /* Frameworks */,
@@ -635,7 +635,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		14CEF4142C5CAED300855D72 /* ggNotch */ = {
+		14CEF4142C5CAED300855D72 /* GGNotch */ = {
 			isa = PBXGroup;
 			children = (
 				11F748672EC9AC9600F841DB /* XPCHelperClient */,
@@ -657,7 +657,7 @@
 				14CEF4192C5CAED400855D72 /* Assets.xcassets */,
 				14A7E5962C65FD31008C1BE9 /* ggNotch.m4a */,
 				1443E7F42C609E650027C1FC /* Info.plist */,
-				14CEF41E2C5CAED400855D72 /* ggNotch.entitlements */,
+				14CEF41E2C5CAED400855D72 /* GGNotch.entitlements */,
 				14CEF41B2C5CAED400855D72 /* Preview Content */,
 				112FB72F2CCF12CC0015238C /* private */,
 				11CC44A12CEE614100C7244B /* GGNotchViewCoordinator.swift */,
