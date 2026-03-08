@@ -412,17 +412,15 @@ struct VolumeControlView: View {
 struct NotchHomeView: View {
     @EnvironmentObject var vm: GGNotchViewModel
     @ObservedObject var webcamManager = WebcamManager.shared
-    @ObservedObject var batteryModel = BatteryStatusViewModel.shared
-    @ObservedObject var coordinator = GGNotchViewCoordinator.shared
     let albumArtNamespace: Namespace.ID
+    let firstLaunch: Bool
 
     var body: some View {
         Group {
-            if !coordinator.firstLaunch {
+            if !firstLaunch {
                 mainContent
             }
         }
-        // simplified: use a straightforward opacity transition
         .transition(.opacity)
     }
 

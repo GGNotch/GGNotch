@@ -169,6 +169,14 @@ struct ContentView: View {
                                 handleUpGesture(translation: translation, phase: phase)
                             }
                     }
+                    .background(
+                        HorizontalPageScrollMonitor(
+                            isActive: vm.notchState == .open && Defaults[.enableGestures],
+                            threshold: Defaults[.gestureSensitivity],
+                            onSwipeLeft: { switchPage(forward: true) },
+                            onSwipeRight: { switchPage(forward: false) }
+                        )
+                    )
                     .onReceive(NotificationCenter.default.publisher(for: .sharingDidFinish)) { _ in
                         if vm.notchState == .open && !isHovering && !vm.isBatteryPopoverActive {
                             hoverTask?.cancel()
@@ -377,14 +385,19 @@ struct ContentView: View {
               }
               .zIndex(1)
             if vm.notchState == .open {
-                VStack {
-                    switch coordinator.currentView {
-                    case .home:
-                        NotchHomeView(albumArtNamespace: albumArtNamespace)
-                    case .shelf:
+                GeometryReader { geo in
+                    HStack(spacing: 0) {
+                        NotchHomeView(albumArtNamespace: albumArtNamespace, firstLaunch: coordinator.firstLaunch)
+                            .frame(width: geo.size.width)
+                            .clipped()
                         ShelfView()
+                            .frame(width: geo.size.width)
+                            .clipped()
                     }
+                    .offset(x: coordinator.currentView == .home ? 0 : -geo.size.width)
+                    .animation(animationSpring, value: coordinator.currentView)
                 }
+                .clipped()
                 .transition(
                     .scale(scale: 0.8, anchor: .top)
                     .combined(with: .opacity)
@@ -616,6 +629,17 @@ struct ContentView: View {
         }
     }
 
+    private func switchPage(forward: Bool) {
+        let allViews: [NotchViews] = [.home, .shelf]
+        guard let currentIndex = allViews.firstIndex(of: coordinator.currentView) else { return }
+        let nextIndex = forward ? currentIndex + 1 : currentIndex - 1
+        guard allViews.indices.contains(nextIndex) else { return }
+        withAnimation(animationSpring) {
+            coordinator.currentView = allViews[nextIndex]
+        }
+        if Defaults[.enableHaptics] { haptics.toggle() }
+    }
+
     private func handleUpGesture(translation: CGFloat, phase: NSEvent.Phase) {
         guard vm.notchState == .open && !vm.isHoveringCalendar else { return }
 
@@ -641,6 +665,83 @@ struct ContentView: View {
             if Defaults[.enableHaptics] {
                 haptics.toggle()
             }
+        }
+    }
+}
+
+// MARK: - Horizontal Page Scroll Monitor
+
+private struct HorizontalPageScrollMonitor: NSViewRepresentable {
+    var isActive: Bool
+    var threshold: CGFloat
+    var onSwipeLeft: () -> Void
+    var onSwipeRight: () -> Void
+
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        context.coordinator.install(on: view)
+        return view
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+        context.coordinator.isActive = isActive
+        context.coordinator.onSwipeLeft = onSwipeLeft
+        context.coordinator.onSwipeRight = onSwipeRight
+    }
+
+    static func dismantleNSView(_ nsView: NSView, coordinator: Coordinator) {
+        coordinator.remove()
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(threshold: threshold, onSwipeLeft: onSwipeLeft, onSwipeRight: onSwipeRight)
+    }
+
+    @MainActor final class Coordinator: NSObject {
+        var isActive: Bool = false
+        private weak var view: NSView?
+        private var monitor: Any?
+        private var accumulator: CGFloat = 0
+        let threshold: CGFloat
+        var onSwipeLeft: () -> Void
+        var onSwipeRight: () -> Void
+
+        init(threshold: CGFloat, onSwipeLeft: @escaping () -> Void, onSwipeRight: @escaping () -> Void) {
+            self.threshold = threshold
+            self.onSwipeLeft = onSwipeLeft
+            self.onSwipeRight = onSwipeRight
+        }
+
+        func install(on view: NSView) {
+            self.view = view
+            monitor = NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { [weak self, weak view] event in
+                guard let self, let view, event.window === view.window, self.isActive else { return event }
+
+                let absDX = abs(event.scrollingDeltaX)
+                let absDY = abs(event.scrollingDeltaY)
+                guard absDX > absDY * 1.5 else { return event }
+
+                if event.phase == .ended || event.momentumPhase == .ended {
+                    self.accumulator = 0
+                    return event
+                }
+
+                // Use raw deltaX like CalendarView — naturally respects system scroll direction
+                self.accumulator += event.scrollingDeltaX
+
+                if self.accumulator < -self.threshold {
+                    self.accumulator = 0
+                    self.onSwipeLeft()
+                } else if self.accumulator > self.threshold {
+                    self.accumulator = 0
+                    self.onSwipeRight()
+                }
+                return event
+            }
+        }
+
+        func remove() {
+            if let m = monitor { NSEvent.removeMonitor(m); monitor = nil }
         }
     }
 }
