@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import ApplicationServices
 import Combine
 import Defaults
 import SwiftUI

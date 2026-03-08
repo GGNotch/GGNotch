@@ -35,11 +35,25 @@ final class MediaKeyInterceptor {
     // MARK: - Accessibility (via XPC)
 
     func requestAccessibilityAuthorization() {
-        XPCHelperClient.shared.requestAccessibilityAuthorization()
+        // Try prompting from the main process first (adds *this* app to accessibility list)
+        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
+        AXIsProcessTrustedWithOptions(options)
     }
 
     func ensureAccessibilityAuthorization(promptIfNeeded: Bool = false) async -> Bool {
-        await XPCHelperClient.shared.ensureAccessibilityAuthorization(promptIfNeeded: promptIfNeeded)
+        if AXIsProcessTrusted() { return true }
+        if promptIfNeeded {
+            // Open System Settings → Accessibility so user can grant to this app
+            await MainActor.run {
+                NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!)
+                // Also try in-process prompt (may be blocked by sandbox but worth trying)
+                let opts = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
+                AXIsProcessTrustedWithOptions(opts)
+            }
+            // Wait briefly for user to act
+            try? await Task.sleep(for: .seconds(1))
+        }
+        return AXIsProcessTrusted()
     }
 
     // MARK: - Event Tap
@@ -56,7 +70,7 @@ final class MediaKeyInterceptor {
         // Only require Accessibility if any selected source uses the built-in controls
         let needsAccessibility = Defaults[.osdBrightnessSource] == .builtin || Defaults[.osdVolumeSource] == .builtin
         if needsAccessibility {
-            let authorized = await XPCHelperClient.shared.isAccessibilityAuthorized()
+            let authorized = AXIsProcessTrusted()
             if !authorized {
                 if promptIfNeeded {
                     let granted = await ensureAccessibilityAuthorization(promptIfNeeded: true)
@@ -80,7 +94,7 @@ final class MediaKeyInterceptor {
             },
             userInfo: UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque())
         )
-        
+
         if let eventTap {
             runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
             if let runLoopSource {
