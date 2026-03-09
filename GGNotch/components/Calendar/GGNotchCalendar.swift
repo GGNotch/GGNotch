@@ -8,6 +8,48 @@
 import Defaults
 import SwiftUI
 
+private struct CalendarScrollMonitor: NSViewRepresentable {
+    @Binding var isHovering: Bool
+    var onScroll: (CGFloat) -> Void
+
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        context.coordinator.install(on: view)
+        return view
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+        context.coordinator.isHovering = isHovering
+        context.coordinator.onScroll = onScroll
+    }
+
+    static func dismantleNSView(_ nsView: NSView, coordinator: Coordinator) {
+        coordinator.remove()
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator() }
+
+    @MainActor final class Coordinator: NSObject {
+        var isHovering: Bool = false
+        var onScroll: (CGFloat) -> Void = { _ in }
+        private var monitor: Any?
+
+        func install(on view: NSView) {
+            monitor = NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { [weak self, weak view] event in
+                guard let self, let view, event.window === view.window, self.isHovering else { return event }
+                if abs(event.deltaY) > abs(event.deltaX) && abs(event.deltaY) > 0.1 {
+                    self.onScroll(event.deltaY)
+                }
+                return event
+            }
+        }
+
+        func remove() {
+            if let m = monitor { NSEvent.removeMonitor(m); monitor = nil }
+        }
+    }
+}
+
 struct Config: Equatable {
     //    var count: Int = 10  // 3 days past + today + 7 days future
     var past: Int = 7
@@ -76,17 +118,10 @@ struct WheelPicker: View {
         }
         .onAppear {
             scrollToToday(config: config)
-            
-            // Register local monitor for scroll events
-            NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { event in
-                guard isHovering else { return event }
-                
-                if abs(event.deltaY) > abs(event.deltaX) && abs(event.deltaY) > 0.1 {
-                    navigateDateByScrollWheel(deltaY: event.deltaY)
-                }
-                return event
-            }
         }
+        .background(
+            CalendarScrollMonitor(isHovering: $isHovering, onScroll: navigateDateByScrollWheel)
+        )
         .onChange(of: scrollPosition) { oldValue, newValue in
             if !byClick {
                 handleScrollChange(newValue: newValue, config: config)
@@ -248,20 +283,16 @@ struct CalendarView: View {
                         .foregroundColor(Color(white: 0.65))
                 }
 
-                ZStack(alignment: .top) {
-                    WheelPicker(selectedDate: $selectedDate, config: Config())
-                    HStack(alignment: .top) {
-                        LinearGradient(
-                            colors: [Color.black, .clear], startPoint: .leading, endPoint: .trailing
-                        )
-                        .frame(width: 20)
-                        Spacer()
-                        LinearGradient(
-                            colors: [.clear, Color.black], startPoint: .leading, endPoint: .trailing
-                        )
-                        .frame(width: 20)
+                WheelPicker(selectedDate: $selectedDate, config: Config())
+                    .mask {
+                        HStack(spacing: 0) {
+                            LinearGradient(colors: [.clear, .black], startPoint: .leading, endPoint: .trailing)
+                                .frame(width: 20)
+                            Color.black
+                            LinearGradient(colors: [.black, .clear], startPoint: .leading, endPoint: .trailing)
+                                .frame(width: 20)
+                        }
                     }
-                }
             }
             .fixedSize(horizontal: false, vertical: true)
 

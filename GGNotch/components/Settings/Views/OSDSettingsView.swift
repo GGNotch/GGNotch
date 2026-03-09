@@ -5,6 +5,8 @@
 //  Created by Alexander on 2026-02-07.
 //
 
+import AppKit
+import ApplicationServices
 import SwiftUI
 import Defaults
 import CoreGraphics
@@ -90,12 +92,10 @@ struct OSDSettings: View {
                             }
                             Spacer()
                             Button("Grant Access") {
-                                Task {
-                                    let granted = await MediaKeyInterceptor.shared.ensureAccessibilityAuthorization(promptIfNeeded: true)
-                                    await MainActor.run {
-                                        isAccessibilityAuthorized = granted
-                                    }
-                                }
+                                // Open System Settings → Privacy → Accessibility so the user can add this app
+                                NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!)
+                                // Also attempt the in-process prompt (may be suppressed by sandbox, but worth trying)
+                                _ = AXIsProcessTrustedWithOptions([kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary)
                             }
                         }
                         .padding(.vertical, 4)

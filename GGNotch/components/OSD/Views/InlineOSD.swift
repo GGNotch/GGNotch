@@ -20,20 +20,9 @@ struct InlineOSD: View {
         HStack {
             HStack(spacing: 5) {
                 OSDIconView(eventType: type, icon: icon, value: value, accent: accent)
-                
-                Text(Type2Name(type))
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .lineLimit(1)
-                    .allowsTightening(true)
-                    .contentTransition(.numericText())
             }
-            .frame(width: 100 - (hoverAnimation ? 0 : 12) + gestureProgress / 2, height: vm.notchSize.height - (hoverAnimation ? 0 : 12), alignment: .leading)
-            
-            Rectangle()
-                .fill(.black)
-                .frame(width: vm.closedNotchSize.width - 20)
-            
+            .frame(alignment: .leading)
+
             HStack {
                 if (type == .mic) {
                     Text(value.isZero ? "muted" : "unmuted")
@@ -44,7 +33,7 @@ struct InlineOSD: View {
                         .frame(maxWidth: .infinity, alignment: .trailing)
                         .contentTransition(.interpolate)
                 } else {
-                        HStack {
+                    HStack {
                         DraggableProgressBar(value: $value, onChange: { v in
                             if type == .volume {
                                 VolumeManager.shared.setAbsolute(Float32(v))
@@ -53,30 +42,21 @@ struct InlineOSD: View {
                             }
                         }, accentColor: accent, compact: true)
                         .frame(maxWidth: .infinity)
-                        if (type == .volume && value.isZero) {
-                            Text("muted")
-                                .font(.caption)
-                                .fontWeight(.medium)
-                                .foregroundStyle(.gray)
-                                .lineLimit(1)
-                                .allowsTightening(true)
-                                .multilineTextAlignment(.trailing)
-                        } else if Defaults[.showClosedNotchOSDPercentage] {
-                            Text("\(Int(value * 100))%")
-                                .font(.caption)
-                                .fontWeight(.medium)
-                                .foregroundStyle(.gray)
-                                .lineLimit(1)
-                                .allowsTightening(true)
-                                .multilineTextAlignment(.trailing)
-                        }
+                        Text("\(Int(value * 100))%")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.gray)
+                            .lineLimit(1)
+                            .allowsTightening(true)
+                            .multilineTextAlignment(.trailing)
+                            .contentTransition(.numericText())
                     }
                 }
             }
-            .padding(.trailing, 4)
-            .frame(width: 100 - (hoverAnimation ? 0 : 12) + gestureProgress / 2, height: vm.closedNotchSize.height - (hoverAnimation ? 0 : 12), alignment: .center)
+            .padding(.trailing, 2)
+            .frame(width: vm.closedNotchSize.width - 20 + 100 - (hoverAnimation ? 0 : 12) + gestureProgress / 2, height: (vm.closedNotchSize.height - (hoverAnimation ? 0 : 12)) * 2, alignment: .center)
         }
-        .frame(height: vm.closedNotchSize.height + (hoverAnimation ? 8 : 0), alignment: .center)
+        .frame(height: (vm.closedNotchSize.height + (hoverAnimation ? 8 : 0)) * 2, alignment: .bottom)
     }
     
     func Type2Name(_ type: SneakContentType) -> String {
