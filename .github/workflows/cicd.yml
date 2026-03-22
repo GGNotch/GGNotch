@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Build
-        uses: mxcl/xcodebuild@e366f14791346edb74397fe9a762ccee86eddc06 # v3.5.0
+        uses: mxcl/xcodebuild@d3ee9b419c1be9a988086c58fe0988f32d99cfc5 # v3.5.0
         with:
           xcode: ${{ matrix.xcode }}
           platform: macOS
